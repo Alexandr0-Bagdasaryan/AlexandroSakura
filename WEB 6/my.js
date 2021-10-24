@@ -1,9 +1,16 @@
 function updatePrice() {
   // Находим select по имени в DOM.
-  let s = document.getElementsByName("prodType");
-  let select = s[0];
-  let price = 0;
-  let prices = getPrices();
+  let count =  document.querySelector('#count').value.match(/^\d+$/);
+  if (count <=0) {
+    document.querySelector('.XAXA').innerHTML = '<span style="color: red;">кол-во товара должно быть больше нуля</span>';
+    let checkDiv = document.getElementById("checkboxes");
+    checkDiv.style.display = "none";
+  }
+  else {
+  document.querySelector('.XAXA').innerHTML = '<span style="color: green;"></span>';
+  var select = document.querySelector('select[name=prodType]');
+  var price = 0;
+  var prices = getPrices();
   let priceIndex = parseInt(select.value) - 1;
   if (priceIndex >= 0) {
     price = prices.prodTypes[priceIndex];
@@ -40,12 +47,13 @@ function updatePrice() {
   });
   
   let prodPrice = document.getElementById("prodPrice");
-  prodPrice.innerHTML = price + " рублей";
+  prodPrice.innerHTML = count * price + " рублей";
+}
 }
 
 function getPrices() {
   return {
-    prodTypes: [100, 200, 150],
+    prodTypes: [100, 150, 200],
     prodOptions: {
       option2: 10,
       option1:5,
@@ -95,4 +103,9 @@ window.addEventListener('DOMContentLoaded', function (event) {
   });
 
   updatePrice();
+  count.onkeypress = function(e) {
+    if (e.keyCode == 13 ||  e.key == 13) {
+      updatePrice();
+    }
+  };
 });
